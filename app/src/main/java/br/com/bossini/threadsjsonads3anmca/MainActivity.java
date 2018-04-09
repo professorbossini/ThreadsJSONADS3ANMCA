@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.List;
 
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -22,8 +23,10 @@ public class MainActivity extends AppCompatActivity {
                     minTextView,
                     maxTextView;
 
+    private PrevisaoDAO previsaoDAO;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         descricaoTextView =
@@ -32,6 +35,17 @@ public class MainActivity extends AppCompatActivity {
                 findViewById(R.id.minTextView);
         maxTextView =
                 findViewById(R.id.maxTextView);
+        previsaoDAO = new PrevisaoDAO(this);
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        List<Previsao> previsoes = previsaoDAO.listar();
+        Previsao p = previsoes.get(0);
+        minTextView.setText(Double.toString(p.getMin()));
+        maxTextView.setText(Double.toString(p.getMax()));;
+        descricaoTextView.setText(p.getDescricao());
     }
 
     public void obterPrevisoes (View view){
@@ -52,6 +66,7 @@ public class MainActivity extends AppCompatActivity {
                 return response.body().string();
             }
             catch(IOException e){
+                e.printStackTrace();
                 return null;
             }
         }
@@ -60,10 +75,6 @@ public class MainActivity extends AppCompatActivity {
         protected void onPostExecute(String json) {
             try {
                 JSONObject previsao = new JSONObject(json);
-                JSONArray weather = previsao.getJSONArray("weather");
-                String description =
-                        weather.getJSONObject(0).
-                                getString("description");
                 JSONArray list =
                         previsao.getJSONArray("list");
                 JSONObject dia =
@@ -72,6 +83,12 @@ public class MainActivity extends AppCompatActivity {
                         getDouble("min");
                 double max = dia.getJSONObject("temp").
                         getDouble("max");
+                JSONArray weather = dia.getJSONArray("weather");
+                JSONObject detalhes = weather.getJSONObject(0);
+                String description = detalhes.getString("description");
+                Previsao p =
+                        new Previsao (min, max, description);
+                previsaoDAO.inserir(p);
                 descricaoTextView.setText(description);
                 minTextView.setText(Double.toString(min));
                 maxTextView.setText(Double.toString(max));
