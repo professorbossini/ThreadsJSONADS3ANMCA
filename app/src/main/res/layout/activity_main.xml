@@ -14,7 +14,7 @@
         android:layout_height="wrap_content">
 
         <TextView
-            android:text="Descrição"
+            android:text="@string/description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -32,7 +32,7 @@
 
 
         <TextView
-            android:text="Min:"
+            android:text="@string/min"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -52,7 +52,7 @@
 
 
         <TextView
-            android:text="Max:"
+            android:text="@string/max"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 
@@ -67,9 +67,20 @@
 
 
     <Button
-        android:text="OK"
+        android:text="@string/search"
         android:onClick="obterPrevisoes"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <Button
+        android:text="@string/delete"
+        android:onClick="apagarPrevisoes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:text="@string/update"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <!-- fazer: android:onClick="atualizarPrevisoes" -->
 </LinearLayout>

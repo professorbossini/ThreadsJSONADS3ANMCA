@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">ThreadsJSONADS3ANMCA</string>
+    <string name="description">Description</string>
+    <string name="min">Minimum:</string>
+    <string name="max">Maximum:</string>
+    <string name="search">Get</string>
+    <string name="delete">Delete</string>
+    <string name="update">Update</string>
+</resources>

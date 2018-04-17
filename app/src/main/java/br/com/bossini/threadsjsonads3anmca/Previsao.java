@@ -17,8 +17,22 @@ public class Previsao {
         setDescricao(descricao);
     }
 
+    private long id;
     private double min, max;
     private String descricao;
+
+    public Previsao(long id, double min, double max, String descricao) {
+        this (min, max, descricao);
+        setId(id);
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
 
     public double getMin() {
         return min;

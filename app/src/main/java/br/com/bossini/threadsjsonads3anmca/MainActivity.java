@@ -24,6 +24,15 @@ public class MainActivity extends AppCompatActivity {
                     maxTextView;
 
     private PrevisaoDAO previsaoDAO;
+    private Previsao ultimaPrevisao;
+
+    public void apagarPrevisoes (View view){
+        previsaoDAO.apagar(ultimaPrevisao);
+    }
+
+    public void obterPrevisoes (View view){
+        new ConsomeWS().execute("http://api.openweathermap.org/data/2.5/forecast/daily?q=Itapevi&appid=ef0b0973b783e0614ac87612ec04344b&units=metric&lang=pt&cnt=1");
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -42,15 +51,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         List<Previsao> previsoes = previsaoDAO.listar();
-        Previsao p = previsoes.get(0);
-        minTextView.setText(Double.toString(p.getMin()));
-        maxTextView.setText(Double.toString(p.getMax()));;
-        descricaoTextView.setText(p.getDescricao());
+        if (previsoes.size() > 0){
+            Previsao p = previsoes.get(0);
+            ultimaPrevisao = p;
+            minTextView.setText(Double.toString(p.getMin()));
+            maxTextView.setText(Double.toString(p.getMax()));;
+            descricaoTextView.setText(p.getDescricao());
+        }
+
     }
 
-    public void obterPrevisoes (View view){
-        new ConsomeWS().execute("http://api.openweathermap.org/data/2.5/forecast/daily?q=Itapevi&appid=ef0b0973b783e0614ac87612ec04344b&units=metric&lang=pt&cnt=1");
-    }
+
 
     private class ConsomeWS extends AsyncTask <String, Void, String>{
 
@@ -88,7 +99,9 @@ public class MainActivity extends AppCompatActivity {
                 String description = detalhes.getString("description");
                 Previsao p =
                         new Previsao (min, max, description);
-                previsaoDAO.inserir(p);
+                long id = previsaoDAO.inserir(p);
+                p.setId(id);
+                ultimaPrevisao = p;
                 descricaoTextView.setText(description);
                 minTextView.setText(Double.toString(min));
                 maxTextView.setText(Double.toString(max));
